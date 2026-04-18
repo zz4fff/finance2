@@ -6,7 +6,8 @@ import Welcome from './src/pages/Welcome';
 export default function App() {
   return (
     <View>
-      <Welcome />
+      <Text>Welcome to React Native!</Text>
+      {/* <Welcome /> */}
     </View>
   );
 }
