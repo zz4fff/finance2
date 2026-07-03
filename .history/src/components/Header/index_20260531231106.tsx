@@ -1,0 +1,165 @@
+import React, { useState } from 'react';
+
+import { 
+  View, 
+  Text, 
+  StatusBar,
+  StyleSheet,
+  TouchableOpacity 
+} from 'react-native';
+
+import { Feather } from '@expo/vector-icons';
+import { MotiView, MotiText } from 'moti';
+
+import colors from '../../theme/colors';
+
+const statusBarHeight = StatusBar.currentHeight ? StatusBar.currentHeight + 22 : 22;
+
+export default function Header({ name }: { name: string }) {
+  const [menuVisible, setMenuVisible] = useState(false);
+
+  function toggleMenu() {
+    setMenuVisible(previous => !previous);
+  }
+
+  function handleMenuItemPress(action: string) {
+    setMenuVisible(false);
+    // Aqui você pode tratar o clique em cada item, por exemplo navegar ou abrir outra tela.
+    console.log('Menu item selecionado:', action);
+  }
+
+  return (
+    <View style={styles.container}>
+      <MotiView
+        style={styles.content}
+        from={{
+          translateY: -150,
+          opacity: 0,
+        }}
+        animate={{
+          translateY: 0,
+          opacity: 1,
+        }}
+        transition={{
+          type: 'timing',
+          duration: 1500,
+          delay: 300,
+        }}
+      >
+        <MotiText
+          style={styles.username}
+          from={{
+            translateX: -300,
+          }}
+          animate={{
+            translateX: 0,
+          }}
+          transition={{
+            type: 'timing',
+            duration: 1500,
+            delay: 300,
+          }}
+        >
+          <Text style={styles.text}>{name}</Text>
+        </MotiText>
+
+        <View style={styles.menuWrapper}>
+          <TouchableOpacity
+            activeOpacity={0.8}
+            style={styles.buttonUser}
+            onPress={toggleMenu}
+          >
+            <Feather name="user" size={27} color={colors.dark_purple} />
+          </TouchableOpacity>
+
+          {menuVisible && (
+            <View style={styles.dropdownMenu}>
+              <TouchableOpacity
+                style={styles.dropdownItem}
+                onPress={() => handleMenuItemPress('Perfil')}
+              >
+                <Text style={styles.dropdownItemText}>Perfil</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={styles.dropdownItem}
+                onPress={() => handleMenuItemPress('Sair')}
+              >
+                <Text style={styles.dropdownItemText}>Sair</Text>
+              </TouchableOpacity>
+            </View>
+          )}
+        </View>
+      </MotiView>
+    </View>
+  );
+}
+
+const styles = StyleSheet.create({
+  container: {
+    backgroundColor: colors.dark_purple,
+    paddingTop: statusBarHeight,
+    flexDirection: 'row',
+    paddingStart: 16,
+    paddingEnd: 16,
+    paddingBottom: 44,
+  },
+  
+  content: {
+    flex: 1,
+    alignItems: 'center',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
+
+  menuWrapper: {
+    position: 'relative',
+    zIndex: 9999,
+    overflow: 'visible',
+  },
+  
+  username: {
+    fontSize: 18,
+    color: colors.white,
+    fontWeight: 'bold',
+  },
+  
+  buttonUser: {
+    width: 44,
+    height: 44,
+    backgroundColor: colors.opacity_white,
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderRadius: 44 / 2,
+  },
+  
+  dropdownMenu: {
+    position: 'absolute',
+    top: 54,
+    right: 0,
+    width: 140,
+    backgroundColor: colors.white,
+    borderRadius: 12,
+    paddingVertical: 4,
+    shadowColor: colors.black,
+    shadowOffset: { width: 0, height: 3 },
+    shadowOpacity: 0.12,
+    shadowRadius: 8,
+    elevation: 6,
+    zIndex: 9999,
+  },
+
+  dropdownItem: {
+    paddingVertical: 10,
+    paddingHorizontal: 14,
+  },
+
+  dropdownItemText: {
+    color: colors.dark_purple,
+    fontSize: 14,
+  },
+
+  text: {
+    fontSize: 14,
+    color: colors.white,
+  }
+});
